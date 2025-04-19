@@ -7,7 +7,7 @@ class HomeController extends GetxController {
   final FtpService _ftpService = FtpService();
   final isServerRunning = false.obs;
   final serverAddress = ''.obs;
-  final isWifiConnected= false.obs;
+  final isWifiConnected = false.obs;
 
   final portController = TextEditingController(text: '2121');
   final usernameController = TextEditingController(text: 'admin');

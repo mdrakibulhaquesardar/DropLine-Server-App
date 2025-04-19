@@ -139,11 +139,14 @@ class HomeView extends GetView<HomeController> {
                   // 🟢 Main Circle with Power Button
                   GestureDetector(
                     onTap: () {
+                      print("Button tapped");
                       if (controller.isServerRunning.value) {
                         controller.stopServer();
+                        print("Server stopped");
                       } else {
                         if(controller.isWifiConnected.value) {
                           controller.startServer();
+                          print("Server started");
                         } else {
                           Get.snackbar(
                             'Wi-Fi Disconnected',

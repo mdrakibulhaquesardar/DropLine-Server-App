@@ -34,22 +34,22 @@ class FtpServer(private val context: Context) {
             val userManagerFactory = PropertiesUserManagerFactory()
             val userManager = userManagerFactory.createUserManager()
             
-            // Configure user
-            val user = BaseUser()
-            user.name = username
-            user.password = password
-            
-            // Set home directory to external storage
-            val homeDir = Environment.getExternalStorageDirectory().absolutePath
-            user.homeDirectory = homeDir
-            
-            // Set permissions
-            val authorities: List<Authority> = listOf(WritePermission())
-            user.authorities = authorities
-            
-            // Save user
-            userManager.save(user)
-            
+            // Configure admin user
+            val adminUser = BaseUser()
+            adminUser.name = username
+            adminUser.password = password
+            adminUser.homeDirectory = Environment.getExternalStorageDirectory().absolutePath
+            adminUser.authorities = listOf(WritePermission())
+            userManager.save(adminUser)
+
+            // Configure anonymous user
+            val anonymousUser = BaseUser()
+            anonymousUser.name = "anonymous"
+            anonymousUser.password = "" // Allow empty password for anonymous login
+            anonymousUser.homeDirectory = Environment.getExternalStorageDirectory().absolutePath
+            anonymousUser.authorities = listOf(WritePermission()) // Set permissions for anonymous user
+            userManager.save(anonymousUser)
+
             // Set the user manager
             serverFactory.userManager = userManager
             
