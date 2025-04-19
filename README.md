@@ -1,7 +1,7 @@
-# wifi_ftp_app
-
-![App Icon](assets\icon\icon.png)
-
+# DropLine Server
+<p align="center">
+  <img src="assets\icon\icon.png" alt="Dokandar App Logo" width="200"/>
+</p>
 A Flutter application that implements an FTP server, allowing users to transfer files over Wi-Fi. This app is designed to provide a simple and efficient way to manage file transfers between devices on the same network.
 
 ## Features
