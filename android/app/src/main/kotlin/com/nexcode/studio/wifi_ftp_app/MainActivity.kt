@@ -4,6 +4,9 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import android.util.Log
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 
 class MainActivity: FlutterActivity() {
     private val permissionHandler = PermissionHandler(this)
@@ -17,6 +20,12 @@ class MainActivity: FlutterActivity() {
     }
     private val CHANNEL = "com.nexcode.studio.wifi_ftp_app/ftp"
     private var ftpServer: FtpServer? = null
+
+    private fun isConnectedToWifi(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return networkCapabilities != null && networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+    }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -66,6 +75,10 @@ class MainActivity: FlutterActivity() {
                 "requestManageExternalStoragePermission" -> {
                     val granted = permissionHandler.requestManageExternalStoragePermission()
                     result.success(granted)
+                }
+                "isConnectedToWifi" -> {
+                    val isConnected = isConnectedToWifi()
+                    result.success(isConnected)
                 }
                 else -> result.notImplemented()
             }

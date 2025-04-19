@@ -65,6 +65,7 @@ class HomeView extends GetView<HomeController> {
           ),
           Obx(() {
             final isRunning = controller.isServerRunning.value;
+            final isWifiConnected = controller.isWifiConnected.value;
             return Positioned(
               top: size.height * 0.1,
               left: size.width * 0.5 - 30,
@@ -81,7 +82,7 @@ class HomeView extends GetView<HomeController> {
                 ),
                 child: Icon(
                   isRunning ? Icons.wifi : Icons.wifi_off,
-                  color: isRunning ? Colors.white : Colors.white,
+                  color: isRunning ? Colors.white : isWifiConnected ? Colors.white : Colors.red,
                   size: 30,
                 ),
               ),
@@ -141,7 +142,30 @@ class HomeView extends GetView<HomeController> {
                       if (controller.isServerRunning.value) {
                         controller.stopServer();
                       } else {
-                        controller.startServer();
+                        if(controller.isWifiConnected.value) {
+                          controller.startServer();
+                        } else {
+                          Get.snackbar(
+                            'Wi-Fi Disconnected',
+                            'Please connect to Wi-Fi and restart the app',
+                            snackPosition: SnackPosition.TOP,
+                            titleText: Text(
+                              'Wi-Fi Disconnected',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            messageText: Text(
+                              'Please connect to Wi-Fi and restart the app',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            icon: Icon(
+                              Icons.wifi_off,
+                              color: Colors.red,
+                            ),
+                            shouldIconPulse: true,
+
+
+                          );
+                        }
                       }
                     },
                     child: Obx(() {
@@ -195,7 +219,7 @@ class HomeView extends GetView<HomeController> {
 
           // 📝 Bottom Text Section
           Positioned(
-            bottom: size.height * 0.15,
+            bottom: size.height * 0.12,
             left: 0,
             right: 0,
             child: Column(
@@ -217,7 +241,21 @@ class HomeView extends GetView<HomeController> {
                   return Text(
                     controller.isServerRunning.value
                         ? "Connected to Port ${controller.portController.text}"
-                        : "Tap the button to start the server",
+                        : controller.isWifiConnected.value ? "Tap the button to start the server" : "Disconnected from Wi-Fi",
+                    style: TextStyle(
+                      color: controller.isWifiConnected.value ? Colors.white : Colors.red,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  );
+                }),
+                if(!controller.isWifiConnected.value)
+                SizedBox(height: 5),
+                Obx(() {
+                  return Text(
+                    controller.isWifiConnected.value
+                        ? ""
+                        : "Please connect to Wi-Fi and Restart the app",
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 16,

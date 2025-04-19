@@ -7,22 +7,24 @@ class HomeController extends GetxController {
   final FtpService _ftpService = FtpService();
   final isServerRunning = false.obs;
   final serverAddress = ''.obs;
-
+  final isWifiConnected= false.obs;
 
   final portController = TextEditingController(text: '2121');
   final usernameController = TextEditingController(text: 'admin');
   final passwordController = TextEditingController(text: 'password');
-
 
   var anonymousAccess = true.obs;
   var useFTPS = false.obs;
   var sslMode = true.obs;
   var readOnly = false.obs;
 
+  static const platform = MethodChannel('com.nexcode.studio.wifi_ftp_app/ftp');
+
   @override
   void onInit() {
     super.onInit();
     checkPermission();
+    checkWifiConnection();
     _checkServerStatus();
   }
 
@@ -45,15 +47,14 @@ class HomeController extends GetxController {
 
   Future<void> checkPermission() async {
     isPermissionGranted.value =
-        await MethodChannel('com.nexcode.studio.wifi_ftp_app/ftp')
-            .invokeMethod('isManageExternalStoragePermissionGranted');
+        await platform.invokeMethod('isManageExternalStoragePermissionGranted');
   }
 
   Future<void> requestPermission() async {
-    final result = await MethodChannel('com.nexcode.studio.wifi_ftp_app/ftp')
-        .invokeMethod('requestManageExternalStoragePermission');
+    final result =
+        await platform.invokeMethod('requestManageExternalStoragePermission');
     isPermissionGranted.value = result ?? false;
-}
+  }
 
   Future<void> startServer() async {
     if (!isPermissionGranted.value) {
@@ -95,6 +96,21 @@ class HomeController extends GetxController {
     final password = passwordController.text.trim();
     if (username.isNotEmpty && password.isNotEmpty) {
       await _ftpService.setCredentials(username, password);
+    }
+  }
+
+  Future<void> checkWifiConnection() async {
+    try {
+      final bool isConnected = await platform.invokeMethod('isConnectedToWifi');
+      if (isConnected) {
+        print("Device is connected to Wi-Fi");
+        isWifiConnected.value = true;
+      } else {
+        print("Device is not connected to Wi-Fi");
+        isWifiConnected.value = false;
+      }
+    } on PlatformException catch (e) {
+      print("Failed to check Wi-Fi connection: '${e.message}'.");
     }
   }
 }
