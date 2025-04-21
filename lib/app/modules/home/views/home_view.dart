@@ -122,8 +122,8 @@ class HomeView extends GetView<HomeController> {
                     return AnimatedContainer(
                       duration: Duration(seconds: 1),
                       curve: Curves.easeInOut,
-                      width: controller.isServerRunning.value ? 320 : 300,
-                      height: controller.isServerRunning.value ? 320 : 300,
+                      width: controller.isServerRunning.value ? 320 : 280,
+                      height: controller.isServerRunning.value ? 320 : 280,
                       decoration: BoxDecoration(
                         color: Colors.black38.withOpacity(0.2),
                         shape: BoxShape.circle,

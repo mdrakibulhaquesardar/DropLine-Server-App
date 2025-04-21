@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:wifi_ftp_app/app/routes/app_pages.dart';
 import '../../home/controllers/home_controller.dart';
 
 class SettingView extends GetView<HomeController> {
@@ -40,7 +41,6 @@ class SettingView extends GetView<HomeController> {
             _buildSwitchTile('Use FTPS', controller.useFTPS),
             _buildSwitchTile('SSL Mode', controller.sslMode),
             _buildSwitchTile('Read Only', controller.readOnly),
-             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             // ElevatedButton(
             //     onPressed: (){
             //       controller.updatePort();
@@ -54,6 +54,39 @@ class SettingView extends GetView<HomeController> {
             //       ),
             //     ),
             //     child: const Text('Save Settings')),
+            // how to use DropLine In Section
+            Divider(
+              color: Colors.grey.shade800,
+              thickness: .5,
+              height: 40,
+            ),
+            ListTile(
+              title: const Text(
+                'How to use DropLine',
+                style: TextStyle(color: Colors.white),
+              ),
+              trailing: const Icon(Icons.arrow_forward, color: Colors.white),
+              onTap: () {
+                // Navigate to the how to use page
+                Get.toNamed(Routes.TUTORIAL);
+
+              },
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            // dev info
+            const Text(
+              'Developed by: in/rakibullhaque',
+              style: TextStyle(color: Colors.grey),
+              textAlign: TextAlign.center,
+
+            ),
+            // email
+            const Text(
+              'rakibullhaques@gmail.com',
+              style: TextStyle(color: Colors.grey),
+              textAlign: TextAlign.center,
+
+            ),
           ],
         ),
       ),
@@ -63,9 +96,19 @@ class SettingView extends GetView<HomeController> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          // version number
+          const SizedBox(width: 10),
+          const Text(
+            'v1.0.2',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+        ],
       ),
     );
   }
